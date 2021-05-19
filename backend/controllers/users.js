@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // Ошибки
 const BadRequestError = require('../errors/badRequest'); // 400
@@ -136,7 +137,7 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign(
         { _id: user._id },
-        'у_меня_река_только_нет_моста',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
       // res.cookie('jwt', token,

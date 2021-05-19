@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorized'); // 401
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 // Проверяет наличие токена в headers: authorization,
 // сравнивает с базой данных и пропускает при совпадении
@@ -12,7 +13,8 @@ const auth = (req, res, next) => {
   const token = authorization.replace('Bearer ', '');
   let payload;
   try {
-    payload = jwt.verify(token, 'у_меня_река_только_нет_моста');
+    payload = jwt.verify(token,
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     throw new UnauthorizedError('Необходима авторизация');
   }
