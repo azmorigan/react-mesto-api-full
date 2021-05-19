@@ -12,7 +12,7 @@ const { createUser, login } = require('./controllers/users');
 const NotFoundError = require('./errors/notFound');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(cors());
@@ -43,7 +43,7 @@ app.post('/signup',
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
       // eslint-disable-next-line
-      avatar: Joi.string().regex(/https*:\/\/[www.]*[\w\W]+?\.ru[\d\w\Q._-~:/?#@!$&'()*+,;=\E]*/),
+      avatar: Joi.string().regex(/(https?:\/\/.*\.(?:png|jpg))/),
       email: Joi.string().required().email(),
       password: Joi.string().required().min(6),
     }),
